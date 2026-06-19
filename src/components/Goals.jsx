@@ -94,18 +94,19 @@ export default function Goals({
                 <span className="text-white font-extrabold">{currentAnnualEmissions} Tons/Yr</span>
               </div>
               <div className="flex justify-between text-sm">
-                <span className="text-slate-400">Target Footprint:</span>
+                <label htmlFor="input-target-emissions" className="text-slate-400 cursor-pointer">Target Footprint:</label>
                 <span className="text-emerald-400 font-extrabold">{targetTons} Tons/Yr</span>
               </div>
 
               <input 
+                id="input-target-emissions"
                 type="range" 
                 min={Math.round(currentAnnualEmissions * 0.3 * 10) / 10} 
                 max={currentAnnualEmissions} 
                 step="0.1"
                 value={targetTons} 
                 onChange={e => handleUpdateTarget(e.target.value)}
-                className="w-full accent-emerald-400 bg-slate-800 rounded-lg h-2"
+                className="w-full accent-emerald-400 bg-slate-800 rounded-lg h-2 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-500"
                 aria-label="Set Carbon Target Slider"
               />
 
@@ -164,7 +165,7 @@ export default function Goals({
           {/* Bar Chart comparing Current vs Target */}
           <div className="glass-card border border-white/5 rounded-3xl p-6 h-[220px] flex flex-col justify-between shadow-2xl">
             <h4 className="text-xs font-bold text-white uppercase tracking-wider mb-2">Target vs Current Profile (Tons/Yr)</h4>
-            <div className="h-[150px] w-full">
+            <div className="h-[150px] w-full" role="region" aria-label="Current versus Target Carbon Footprint Comparison Chart">
               <ResponsiveContainer width="100%" height="100%">
                 <BarChart data={chartData} margin={{ left: -25, right: 10, top: 10, bottom: 5 }}>
                   <CartesianGrid vertical={false} />
@@ -245,18 +246,19 @@ export default function Goals({
 
             {/* Custom goal form */}
             <form onSubmit={handleAddCustom} className="border-t border-white/5 pt-5 mt-auto">
-              <label className="text-xs font-semibold text-slate-400 block mb-2">Create Custom Green Commitment</label>
+              <label htmlFor="input-custom-goal" className="text-xs font-semibold text-slate-400 block mb-2">Create Custom Green Commitment</label>
               <div className="flex gap-2">
                 <input
+                  id="input-custom-goal"
                   type="text"
-                  placeholder="e.g. Turn off router before sleeping, buy glass jugs..."
+                  placeholder="e.g. Turn off router at night, line-dry laundry..."
                   value={newGoalText}
                   onChange={e => setNewGoalText(e.target.value)}
-                  className="glass-input flex-grow px-4 py-2.5 rounded-xl text-xs"
+                  className="glass-input flex-grow px-4 py-2.5 rounded-xl text-xs focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-500"
                 />
                 <button
                   type="submit"
-                  className="bg-emerald-500 hover:bg-emerald-400 px-4 py-2.5 rounded-xl text-slate-950 transition-all shadow-md shadow-emerald-500/10 font-bold text-xs flex items-center gap-1.5 flex-shrink-0"
+                  className="bg-emerald-500 hover:bg-emerald-400 px-4 py-2.5 rounded-xl text-slate-950 font-bold transition-all text-xs flex items-center gap-1.5 shadow-md shadow-emerald-500/5 hover:shadow-emerald-500/15 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-500"
                 >
                   <PlusCircle className="w-4 h-4 text-slate-950" /> Add
                 </button>

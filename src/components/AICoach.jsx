@@ -150,7 +150,9 @@ export default function AICoach({
   };
 
   useEffect(() => {
-    chatEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+    if (chatEndRef.current && typeof chatEndRef.current.scrollIntoView === 'function') {
+      chatEndRef.current.scrollIntoView({ behavior: 'smooth' });
+    }
   }, [messages, isTyping]);
 
   const filteredRecommendations = aiRecommendations.filter(rec => {

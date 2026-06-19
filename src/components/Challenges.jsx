@@ -146,7 +146,7 @@ export default function Challenges({
             <button
               key={f}
               onClick={() => setFilter(f)}
-              className={`px-4.5 py-2.5 rounded-xl text-xs font-extrabold capitalize border transition-all ${
+              className={`px-4.5 py-2.5 rounded-xl text-xs font-extrabold capitalize border transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-500 ${
                 filter === f
                   ? 'bg-emerald-500 border-emerald-400 text-slate-950 shadow-md shadow-emerald-500/10'
                   : 'bg-white/5 border-white/5 text-slate-400 hover:text-white'
@@ -238,7 +238,7 @@ export default function Challenges({
                 ) : (
                   <button
                     onClick={() => handleClaimPoints(c.id, c.title, c.points)}
-                    className="flex items-center gap-1 text-xs font-black bg-emerald-500 hover:bg-emerald-400 text-slate-950 px-4 py-2 rounded-xl transition-all shadow-md shadow-emerald-500/5 group-hover:shadow-emerald-500/15"
+                    className="flex items-center gap-1 text-xs font-black bg-emerald-500 hover:bg-emerald-400 text-slate-950 px-4 py-2 rounded-xl transition-all shadow-md shadow-emerald-500/5 group-hover:shadow-emerald-500/15 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-500"
                   >
                     Complete
                   </button>

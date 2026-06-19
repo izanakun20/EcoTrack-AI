@@ -121,7 +121,7 @@ export default function LandingPage({ onStart, hasCalculated }) {
         <div className="flex flex-col sm:flex-row gap-4.5 justify-center items-center w-full sm:w-auto">
           <button
             onClick={() => onStart('calculator')}
-            className="w-full sm:w-auto flex items-center justify-center gap-2 bg-gradient-to-r from-emerald-500 to-teal-500 hover:from-emerald-400 hover:to-teal-400 text-slate-950 font-black px-8 py-4.5 rounded-xl shadow-lg shadow-emerald-500/20 hover:shadow-emerald-500/35 transition-all duration-300 transform hover:-translate-y-0.5"
+            className="w-full sm:w-auto flex items-center justify-center gap-2 bg-gradient-to-r from-emerald-500 to-teal-500 hover:from-emerald-400 hover:to-teal-400 text-slate-950 font-black px-8 py-4.5 rounded-xl shadow-lg shadow-emerald-500/20 hover:shadow-emerald-500/35 transition-all duration-300 transform hover:-translate-y-0.5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-500"
           >
             {hasCalculated ? 'Go to Calculator' : 'Compute Carbon Score'}
             <ArrowRight className="w-5.5 h-5.5 text-slate-950" />
@@ -130,7 +130,7 @@ export default function LandingPage({ onStart, hasCalculated }) {
           {hasCalculated && (
             <button
               onClick={() => onStart('dashboard')}
-              className="w-full sm:w-auto flex items-center justify-center gap-2 bg-slate-900/50 hover:bg-slate-900 border border-white/5 text-slate-200 font-bold px-8 py-4.5 rounded-xl transition-all"
+              className="w-full sm:w-auto flex items-center justify-center gap-2 bg-slate-900/50 hover:bg-slate-900 border border-white/5 text-slate-200 font-bold px-8 py-4.5 rounded-xl transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-500"
             >
               Enter Dashboard
             </button>
@@ -245,7 +245,6 @@ export default function LandingPage({ onStart, hasCalculated }) {
         ))}
       </section>
 
-      {/* 6. Accordion FAQs */}
       <section className="max-w-4xl mx-auto px-4">
         <h2 className="text-2xl md:text-4xl font-extrabold text-white text-center mb-10">Frequently Asked Questions</h2>
         <div className="space-y-4">
@@ -254,17 +253,23 @@ export default function LandingPage({ onStart, hasCalculated }) {
             return (
               <div key={idx} className="glass-card border border-white/5 rounded-2xl overflow-hidden transition-all duration-300">
                 <button
+                  id={`faq-button-${idx}`}
+                  aria-expanded={isOpen}
+                  aria-controls={`faq-answer-${idx}`}
                   onClick={() => toggleFaq(idx)}
-                  className="w-full flex justify-between items-center p-5 text-left font-bold text-sm md:text-base text-white hover:text-emerald-400 transition-colors"
+                  className="w-full flex justify-between items-center p-5 text-left font-bold text-sm md:text-base text-white hover:text-emerald-400 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-500"
                 >
                   <span>{faq.q}</span>
                   <ChevronDown className={`w-5 h-5 text-slate-400 transition-transform duration-300 ${isOpen ? 'transform rotate-180 text-emerald-400' : ''}`} />
                 </button>
-                {isOpen && (
-                  <div className="px-5 pb-5 text-xs md:text-sm text-slate-400 leading-relaxed border-t border-white/5 pt-3">
-                    {faq.a}
-                  </div>
-                )}
+                <div 
+                  id={`faq-answer-${idx}`}
+                  role="region"
+                  aria-labelledby={`faq-button-${idx}`}
+                  className={`${isOpen ? 'block' : 'hidden'} px-5 pb-5 text-xs md:text-sm text-slate-400 leading-relaxed border-t border-white/5 pt-3`}
+                >
+                  {faq.a}
+                </div>
               </div>
             );
           })}
@@ -287,7 +292,7 @@ export default function LandingPage({ onStart, hasCalculated }) {
           
           <button
             onClick={onStart}
-            className="flex items-center gap-2 bg-gradient-to-r from-emerald-500 to-teal-500 hover:from-emerald-400 hover:to-teal-400 text-slate-950 font-black px-7 py-4 rounded-xl shadow-lg transition-all"
+            className="flex items-center gap-2 bg-gradient-to-r from-emerald-500 to-teal-500 hover:from-emerald-400 hover:to-teal-400 text-slate-950 font-black px-7 py-4 rounded-xl shadow-lg transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-500"
           >
             <span>Get Started Free</span>
             <TrendingDown className="w-4 h-4 text-slate-950" />

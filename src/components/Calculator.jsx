@@ -496,7 +496,7 @@ export default function Calculator({ currentInputs, onCalculate, hasCalculated }
               <button
                 type="button"
                 onClick={prevStep}
-                className="flex items-center gap-1 bg-white/5 border border-white/5 hover:bg-white/10 text-white font-bold px-4 py-2.5 rounded-xl transition-all text-xs"
+                className="flex items-center gap-1 bg-white/5 border border-white/5 hover:bg-white/10 text-white font-bold px-4 py-2.5 rounded-xl transition-all text-xs focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-500"
               >
                 <ArrowLeft className="w-4 h-4" /> Back
               </button>
@@ -506,7 +506,7 @@ export default function Calculator({ currentInputs, onCalculate, hasCalculated }
               <button
                 type="button"
                 onClick={nextStep}
-                className="ml-auto flex items-center gap-1 bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-extrabold px-5 py-2.5 rounded-xl transition-all text-xs"
+                className="ml-auto flex items-center gap-1 bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-extrabold px-5 py-2.5 rounded-xl transition-all text-xs focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-500"
               >
                 Continue <ArrowRight className="w-4 h-4 text-slate-950" />
               </button>
@@ -514,7 +514,7 @@ export default function Calculator({ currentInputs, onCalculate, hasCalculated }
               <button
                 type="button"
                 onClick={handleCalculateClick}
-                className="ml-auto flex items-center gap-1.5 bg-gradient-to-r from-emerald-500 to-teal-500 hover:from-emerald-400 hover:to-teal-400 text-slate-950 font-black px-6 py-3 rounded-xl transition-all text-xs shadow-lg shadow-emerald-500/15"
+                className="ml-auto flex items-center gap-1.5 bg-gradient-to-r from-emerald-500 to-teal-500 hover:from-emerald-400 hover:to-teal-400 text-slate-950 font-black px-6 py-3 rounded-xl transition-all text-xs shadow-lg shadow-emerald-500/15 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-500"
               >
                 <CalcIcon className="w-4 h-4 text-slate-950 animate-pulse" /> Compute Carbon
               </button>
@@ -522,7 +522,7 @@ export default function Calculator({ currentInputs, onCalculate, hasCalculated }
               <button
                 type="button"
                 onClick={() => setActiveStep(1)}
-                className="ml-auto flex items-center gap-1.5 bg-white/5 hover:bg-white/10 text-slate-300 hover:text-white font-bold px-5 py-2.5 rounded-xl border border-white/5 transition-all text-xs"
+                className="ml-auto flex items-center gap-1.5 bg-white/5 hover:bg-white/10 text-slate-300 hover:text-white font-bold px-5 py-2.5 rounded-xl border border-white/5 transition-all text-xs focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-500"
               >
                 Recalculate
               </button>

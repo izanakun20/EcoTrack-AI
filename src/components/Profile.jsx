@@ -143,7 +143,7 @@ export default function Profile({
                   onResetData();
                 }
               }}
-              className="w-full flex items-center justify-center gap-2 bg-rose-500/10 border border-rose-500/30 hover:bg-rose-500/20 text-rose-400 font-bold py-3 px-4 rounded-xl transition-all text-xs"
+              className="w-full flex items-center justify-center gap-2 bg-rose-500/10 border border-rose-500/30 hover:bg-rose-500/20 text-rose-400 font-bold py-3 px-4 rounded-xl transition-all text-xs focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-rose-500"
             >
               <RotateCcw className="w-4 h-4 text-rose-400" />
               Reset All Application Data

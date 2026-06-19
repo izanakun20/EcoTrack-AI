@@ -134,9 +134,11 @@ npm run test
 1. **Input Clamping & Validation:**
    - Values entered into the carbon calculator are programmatically validated and clamped to realistic physical boundaries in `calculations.js` (e.g., flight logs capped at 100/yr, travel distance capped at 300km/day, AC hours capped at 24/day).
    - Negative numbers and invalid string categories default back to medium mixed averages, preventing system crashes or division-by-zero errors.
-2. **Defensive Storage Parsing:**
-   - The custom storage hook `useLocalStorage.js` is fortified to handle parsing crashes. If corrupted data or structural modifications exist in the browser cache, it automatically clears that key and falls back to a clean initial state.
-3. **No External Attack Vectors:**
+2. **Defensive Storage Parsing & Deep Schema Validation:**
+   - The custom storage hook `useLocalStorage.js` is fortified with a recursive `validateSchema` parser. If corrupted data, partial structures, or invalid key types are loaded from browser cache, it automatically backfills missing properties with their default schema definitions to protect application stability.
+3. **Application Error Boundaries:**
+   - App is wrapped within a custom `ErrorBoundary` component. If any runtime rendering exception occurs, the app recovers gracefully by presenting a glassmorphic crash screen allowing users to safely reload the app or reset the cache.
+4. **No External Attack Vectors:**
    - Since all AI recommendation and NLP engines execute locally, no user footprint data or conversation logs are sent over the network, completely avoiding API interception attacks or data leaks.
 
 ---
@@ -144,7 +146,8 @@ npm run test
 ## ♿ Accessibility (a11y) Compliance
 
 The application has been audited and optimized to meet accessibility standards:
-- **Keyboard Navigation:** All interactive navigation elements (sidebar, mobile top headers, logo routes) support full keyboard accessibility (`Tab`, `Enter`, `Space`) with noticeable `focus-visible` emerald rings.
+- **Keyboard Navigation & Outlines:** All interactive buttons (Back, Continue, Complete Quest, Custom Goal, Reset Data) and navigation elements support full keyboard controls with prominent focus rings (`focus-visible:ring-2 focus-visible:ring-emerald-500`).
+- **Interactive FAQ Accordions:** Accordion elements are linked using standard ARIA properties (`aria-expanded`, `aria-controls`, `role="region"`, `aria-labelledby`).
 - **Form Controls:** Every slider input is explicitly linked to its visual control via `htmlFor` and `id` properties.
 - **Semantic Groupings:** Radio-like button selectors (e.g., Diet Habits, Plastic Waste) are structured inside `<fieldset>` elements with descriptive `<legend>` tags, using `aria-pressed` to define the selected state.
 - **Chart Screen Reader Wrappers:** Recharts graphical dashboards are wrapped with `role="region"` and clear `aria-label` summaries explaining chart contexts to screen readers.
