@@ -6,6 +6,10 @@ EcoTrack AI is a next-generation, responsive, and gamified sustainability platfo
 
 Individuals often struggle to understand the environmental impact of their daily activities. EcoTrack AI helps users calculate, visualize, and reduce their carbon footprint through personalized AI recommendations, gamified challenges, and sustainability insights.
 
+## Live Demo
+
+https://ecotrack-ai-green.netlify.app/
+
 ## Key Features
 
 1. **Carbon Footprint Calculator:** Tabbed, interactive slider-based calculator covering Transportation (car, bike, transit, flights), Energy (electricity, AC), and Diet & Lifestyle habits.
