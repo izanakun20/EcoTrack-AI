@@ -12,10 +12,12 @@ import {
   Bot,
   MessageSquare,
   CheckCircle,
-  HelpCircle
+  HelpCircle,
+  Compass,
+  Trophy
 } from 'lucide-react';
 import { calculateScore } from '../utils/calculations';
-import { chatWithLocalEcoCoach } from '../utils/aiService';
+import { chatWithLocalEcoCoach, runSustainabilityDecisionEngine } from '../utils/aiService';
 
 const CATEGORY_ICONS = {
   transportation: Car,
@@ -33,11 +35,13 @@ export default function AICoach({
   aiRecommendations = [],
   aiRecommendationsLoading = false 
 }) {
+  const engine = runSustainabilityDecisionEngine(inputs, results);
+
   const [messages, setMessages] = useState([
     {
       id: 1,
       sender: 'coach',
-      text: `Hello there! I am your AI Eco Coach. I've analyzed your Carbon Footprint calculations (Score: ${calculateScore(results?.annualTotalTons)}/100) and generated a customized plan of action below. \n\nYou can ask me specific questions in the chat assistant panel, or browse your custom recommendations!`,
+      text: `Hello there! I am your AI Eco Coach. I've classified your profile as **${engine.persona.name}** (Carbon Score: ${calculateScore(results?.annualTotalTons)}/100) with a recommendation confidence score of **${engine.confidence}%**.\n\nOur Sustainability Decision Engine has generated a custom plan for you. Ask me how to optimize your top emission sources!`,
       time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
     }
   ]);
@@ -108,6 +112,107 @@ export default function AICoach({
         <p className="text-slate-400 text-sm font-medium">
           Consult our generative AI chat assistant or select goals derived from footprint analytics.
         </p>
+      </div>
+
+      {/* 🧠 Sustainability Decision Engine - 3-Card Grid */}
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+        {/* Card 1: Sustainability Persona */}
+        <div className="glass-card border border-white/5 rounded-3xl p-5 flex flex-col justify-between shadow-2xl relative overflow-hidden">
+          <div className="absolute top-0 right-0 w-24 h-24 rounded-full bg-gradient-to-br from-emerald-500 to-teal-500 opacity-[0.03] blur-xl"></div>
+          <div className="space-y-3 relative z-10">
+            <div className="flex justify-between items-start">
+              <span className="text-[9px] text-slate-500 uppercase tracking-widest font-extrabold block">Sustainability Profile</span>
+              <span className="bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 font-extrabold text-[8px] px-2.5 py-0.5 rounded-full uppercase tracking-wider">
+                CONFIDENCE: {engine.confidence}%
+              </span>
+            </div>
+            <div className="flex items-center gap-3">
+              <div className="bg-slate-950 p-2.5 rounded-xl border border-white/5 text-emerald-400">
+                {engine.persona.name.includes("Commuter") ? (
+                  <Car className="w-5.5 h-5.5 text-sky-400" />
+                ) : engine.persona.name.includes("Energy") ? (
+                  <Zap className="w-5.5 h-5.5 text-amber-500" />
+                ) : engine.persona.name.includes("Champion") ? (
+                  <Trophy className="w-5.5 h-5.5 text-amber-400" />
+                ) : engine.persona.name.includes("Explorer") ? (
+                  <Compass className="w-5.5 h-5.5 text-sky-400" />
+                ) : (
+                  <Leaf className="w-5.5 h-5.5 text-emerald-400 animate-pulse" />
+                )}
+              </div>
+              <div>
+                <h3 className="text-base font-black text-white leading-tight">{engine.persona.name}</h3>
+                <span className="text-[9px] text-slate-400 font-semibold">User Classification</span>
+              </div>
+            </div>
+            <p className="text-xs text-slate-400 leading-relaxed font-semibold">
+              {engine.persona.desc}
+            </p>
+          </div>
+        </div>
+
+        {/* Card 2: What Should I Do First */}
+        <div className="glass-card border border-emerald-500/20 bg-gradient-to-r from-slate-950/70 via-emerald-950/5 to-slate-950/70 rounded-3xl p-5 flex flex-col justify-between shadow-2xl relative overflow-hidden group">
+          <div className="space-y-3 relative z-10">
+            <div className="flex justify-between items-start">
+              <span className="text-[9px] text-slate-500 uppercase tracking-widest font-extrabold block">Best Next Action</span>
+              <span className="bg-rose-500/10 border border-rose-500/20 text-rose-400 font-extrabold text-[8px] px-2.5 py-0.5 rounded-full uppercase tracking-wider">
+                Priority: {engine.bestNextAction.priority}
+              </span>
+            </div>
+            <div>
+              <h4 className="font-extrabold text-white text-sm md:text-base leading-snug">{engine.bestNextAction.title}</h4>
+              <p className="text-[10.5px] text-slate-400 mt-1 leading-relaxed font-medium">
+                {engine.bestNextAction.description}
+              </p>
+            </div>
+            <div className="flex justify-between items-center border-t border-white/5 pt-3">
+              <span className="text-[10px] font-black text-emerald-400 bg-emerald-500/10 border border-emerald-500/25 px-2 py-0.5 rounded-full">
+                -{engine.bestNextAction.savings} kg CO₂/yr
+              </span>
+              <span className="text-[9px] text-slate-500 font-semibold uppercase tracking-wider">
+                Time: {engine.bestNextAction.timeToImplement}
+              </span>
+            </div>
+          </div>
+        </div>
+
+        {/* Card 3: AI Reasoning */}
+        <div className="glass-card border border-white/5 rounded-3xl p-5 flex flex-col justify-between shadow-2xl relative overflow-hidden">
+          <div className="space-y-3 relative z-10">
+            <span className="text-[9px] text-slate-500 uppercase tracking-widest font-extrabold block">AI Reasoning & drivers</span>
+            <p className="text-[10.5px] text-slate-400 leading-relaxed font-semibold">
+              "{engine.reasoning}"
+            </p>
+            <div className="space-y-2 border-t border-white/5 pt-3">
+              <span className="text-[9px] text-slate-500 uppercase font-extrabold block">Top Emission Sources</span>
+              <div className="space-y-1.5">
+                {engine.top3Sources.map((src, idx) => (
+                  <div key={idx} className="space-y-1">
+                    <div className="flex justify-between text-[9px] font-extrabold text-slate-400">
+                      <span>{idx + 1}. {src.name}</span>
+                      <span>{src.pct}%</span>
+                    </div>
+                    <div className="w-full bg-slate-950 h-1 rounded-full overflow-hidden border border-white/5">
+                      <div 
+                        className={`h-full rounded-full bg-gradient-to-r ${
+                          src.id === 'transportation' 
+                            ? 'from-sky-500 to-sky-400'
+                            : src.id === 'energy'
+                              ? 'from-amber-500 to-amber-450'
+                              : src.id === 'food'
+                                ? 'from-emerald-500 to-emerald-400'
+                                : 'from-violet-500 to-violet-400'
+                        }`}
+                        style={{ width: `${src.pct}%` }}
+                      ></div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
@@ -214,9 +319,16 @@ export default function AICoach({
                     </p>
 
                     <div className="flex justify-between items-center ml-12 border-t border-white/5 pt-3.5">
-                      <span className="text-[10px] text-slate-500 font-semibold">
-                        Difficulty: <strong className="text-slate-400 capitalize">{rec.difficulty}</strong>
-                      </span>
+                      <div className="flex flex-wrap gap-4 text-[10px] text-slate-500 font-semibold">
+                        <span>
+                          Difficulty: <strong className="text-slate-400 capitalize">{rec.difficulty}</strong>
+                        </span>
+                        {rec.timeToImplement && (
+                          <span>
+                            Time: <strong className="text-slate-405">{rec.timeToImplement}</strong>
+                          </span>
+                        )}
+                      </div>
 
                       <button
                         onClick={() => onAddGoal(rec.title, rec.savings)}
@@ -250,90 +362,111 @@ export default function AICoach({
           </div>
         </div>
 
-        {/* Right Side: Chat Assistant panel */}
-        <div className="lg:col-span-5 bg-slate-900/40 border border-white/5 backdrop-blur-md rounded-3xl p-5 md:p-6 flex flex-col h-[630px] justify-between shadow-2xl">
-          <div>
-            <div className="border-b border-white/5 pb-3.5 mb-3.5 flex items-center gap-3">
-              <div className="relative bg-emerald-500/10 p-2.5 rounded-xl border border-emerald-500/30 text-emerald-400 flex items-center justify-center overflow-hidden w-11 h-11 shadow-[0_0_15px_rgba(16,185,129,0.15)] flex-shrink-0">
-                <div className="absolute inset-0 border border-dashed border-emerald-400/30 rounded-xl animate-spin [animation-duration:10s]"></div>
-                <Leaf className="w-5 h-5 text-emerald-400 relative z-10 animate-float" />
+        {/* Right Side: Chat Assistant panel & Weekly Goals */}
+        <div className="lg:col-span-5 flex flex-col gap-6">
+          <div className="bg-slate-900/40 border border-white/5 backdrop-blur-md rounded-3xl p-5 md:p-6 flex flex-col h-[630px] justify-between shadow-2xl">
+            <div>
+              <div className="border-b border-white/5 pb-3.5 mb-3.5 flex items-center gap-3">
+                <div className="relative bg-emerald-500/10 p-2.5 rounded-xl border border-emerald-500/30 text-emerald-400 flex items-center justify-center overflow-hidden w-11 h-11 shadow-[0_0_15px_rgba(16,185,129,0.15)] flex-shrink-0">
+                  <div className="absolute inset-0 border border-dashed border-emerald-400/30 rounded-xl animate-spin [animation-duration:10s]"></div>
+                  <Leaf className="w-5 h-5 text-emerald-400 relative z-10 animate-float" />
+                </div>
+                <div>
+                  <h3 className="font-extrabold text-white text-sm">Eco Coach Chat</h3>
+                  <span className="text-[9px] text-emerald-400 font-bold flex items-center gap-1 animate-pulse">
+                    <span className="w-1.5 h-1.5 rounded-full bg-emerald-400"></span> Online
+                  </span>
+                </div>
               </div>
-              <div>
-                <h3 className="font-extrabold text-white text-sm">Eco Coach Chat</h3>
-                <span className="text-[9px] text-emerald-400 font-bold flex items-center gap-1 animate-pulse">
-                  <span className="w-1.5 h-1.5 rounded-full bg-emerald-400"></span> Online
-                </span>
+
+              {/* Suggested Prompt Chips */}
+              <div className="flex flex-col gap-1.5 mb-4">
+                <span className="text-[9px] text-slate-500 uppercase tracking-widest font-extrabold">Suggested Prompts</span>
+                <div className="flex flex-wrap gap-2">
+                  {suggestedPrompts.map((prompt, idx) => (
+                    <button
+                      key={idx}
+                      onClick={() => handleSendMessage(prompt)}
+                      className="text-[10px] text-slate-350 bg-slate-950/60 border border-white/5 hover:border-emerald-500/40 hover:text-emerald-400 px-3.5 py-2 rounded-xl transition-all duration-300 font-extrabold flex items-center gap-1.5 hover:scale-[1.03] hover:shadow-[0_4px_12px_rgba(16,185,129,0.1)] outline-none focus-visible:ring-2 focus-visible:ring-emerald-400/50"
+                    >
+                      <MessageSquare className="w-3.5 h-3.5 text-slate-500 hover:text-emerald-400" />
+                      {prompt}
+                    </button>
+                  ))}
+                </div>
               </div>
             </div>
 
-            {/* Suggested Prompt Chips */}
-            <div className="flex flex-col gap-1.5 mb-4">
-              <span className="text-[9px] text-slate-500 uppercase tracking-widest font-extrabold">Suggested Prompts</span>
-              <div className="flex flex-wrap gap-2">
-                {suggestedPrompts.map((prompt, idx) => (
-                  <button
-                    key={idx}
-                    onClick={() => handleSendMessage(prompt)}
-                    className="text-[10px] text-slate-350 bg-slate-950/60 border border-white/5 hover:border-emerald-500/40 hover:text-emerald-400 px-3.5 py-2 rounded-xl transition-all duration-300 font-extrabold flex items-center gap-1.5 hover:scale-[1.03] hover:shadow-[0_4px_12px_rgba(16,185,129,0.1)] outline-none focus-visible:ring-2 focus-visible:ring-emerald-400/50"
-                  >
-                    <MessageSquare className="w-3.5 h-3.5 text-slate-500 hover:text-emerald-400" />
-                    {prompt}
-                  </button>
-                ))}
-              </div>
+            {/* Messages list */}
+            <div className="flex-grow overflow-y-auto space-y-3.5 pr-1 mb-4">
+              {messages.map(m => (
+                <div 
+                  key={m.id}
+                  className={`flex flex-col max-w-[85%] ${
+                    m.sender === 'user' ? 'ml-auto items-end' : 'mr-auto items-start'
+                  }`}
+                >
+                  <div className={`p-3.5 rounded-2xl text-xs md:text-sm ${
+                    m.sender === 'user'
+                      ? 'bg-emerald-500 text-slate-950 rounded-tr-none font-bold shadow-md shadow-emerald-500/5'
+                      : 'bg-slate-950/60 border border-white/5 text-slate-200 rounded-tl-none leading-relaxed font-medium'
+                  }`}>
+                    {m.text}
+                  </div>
+                  <span className="text-[9px] text-slate-650 mt-1 px-1">{m.time}</span>
+                </div>
+              ))}
+              
+              {/* AI typing pulsing loader */}
+              {isTyping && (
+                <div className="flex flex-col items-start max-w-[85%] animate-pulse">
+                  <div className="bg-slate-950/60 border border-white/5 text-slate-400 p-3.5 px-5 rounded-2xl rounded-tl-none flex gap-1.5 items-center">
+                    <span className="w-1.5 h-1.5 rounded-full bg-slate-450 animate-bounce"></span>
+                    <span className="w-1.5 h-1.5 rounded-full bg-slate-450 animate-bounce [animation-delay:0.2s]"></span>
+                    <span className="w-1.5 h-1.5 rounded-full bg-slate-450 animate-bounce [animation-delay:0.4s]"></span>
+                  </div>
+                </div>
+              )}
+              <div ref={chatEndRef} />
             </div>
-          </div>
 
-          {/* Messages list */}
-          <div className="flex-grow overflow-y-auto space-y-3.5 pr-1 mb-4">
-            {messages.map(m => (
-              <div 
-                key={m.id}
-                className={`flex flex-col max-w-[85%] ${
-                  m.sender === 'user' ? 'ml-auto items-end' : 'mr-auto items-start'
-                }`}
+            {/* Input form */}
+            <form onSubmit={handleFormSubmit} className="flex gap-2 border-t border-white/5 pt-4">
+              <input
+                type="text"
+                placeholder="Ask how to reduce commutes, optimize AC power..."
+                value={inputVal}
+                onChange={e => setInputVal(e.target.value)}
+                className="glass-input flex-grow px-4 py-2.5 rounded-xl text-xs"
+              />
+              <button
+                type="submit"
+                className="bg-emerald-500 hover:bg-emerald-400 p-2.5 rounded-xl text-slate-950 transition-all shadow-md shadow-emerald-500/10 flex-shrink-0"
+                aria-label="Send message"
               >
-                <div className={`p-3.5 rounded-2xl text-xs md:text-sm ${
-                  m.sender === 'user'
-                    ? 'bg-emerald-500 text-slate-950 rounded-tr-none font-bold shadow-md shadow-emerald-500/5'
-                    : 'bg-slate-950/60 border border-white/5 text-slate-200 rounded-tl-none leading-relaxed font-medium'
-                }`}>
-                  {m.text}
-                </div>
-                <span className="text-[9px] text-slate-650 mt-1 px-1">{m.time}</span>
-              </div>
-            ))}
-            
-            {/* AI typing pulsing loader */}
-            {isTyping && (
-              <div className="flex flex-col items-start max-w-[85%] animate-pulse">
-                <div className="bg-slate-950/60 border border-white/5 text-slate-400 p-3.5 px-5 rounded-2xl rounded-tl-none flex gap-1.5 items-center">
-                  <span className="w-1.5 h-1.5 rounded-full bg-slate-450 animate-bounce"></span>
-                  <span className="w-1.5 h-1.5 rounded-full bg-slate-450 animate-bounce [animation-delay:0.2s]"></span>
-                  <span className="w-1.5 h-1.5 rounded-full bg-slate-450 animate-bounce [animation-delay:0.4s]"></span>
-                </div>
-              </div>
-            )}
-            <div ref={chatEndRef} />
+                <Send className="w-4 h-4 text-slate-950" />
+              </button>
+            </form>
           </div>
 
-          {/* Input form */}
-          <form onSubmit={handleFormSubmit} className="flex gap-2 border-t border-white/5 pt-4">
-            <input
-              type="text"
-              placeholder="Ask how to reduce commutes, optimize AC power..."
-              value={inputVal}
-              onChange={e => setInputVal(e.target.value)}
-              className="glass-input flex-grow px-4 py-2.5 rounded-xl text-xs"
-            />
-            <button
-              type="submit"
-              className="bg-emerald-500 hover:bg-emerald-400 p-2.5 rounded-xl text-slate-950 transition-all shadow-md shadow-emerald-500/10 flex-shrink-0"
-              aria-label="Send message"
-            >
-              <Send className="w-4 h-4 text-slate-950" />
-            </button>
-          </form>
+          {/* Personalized Weekly Goals Card */}
+          <div className="glass-card border border-emerald-500/10 bg-slate-950/20 rounded-3xl p-5 md:p-6 shadow-2xl space-y-4">
+            <h3 className="font-extrabold text-white text-sm flex items-center gap-2">
+              <Trophy className="w-4.5 h-4.5 text-amber-400 font-black" />
+              Personalized Weekly Goals
+            </h3>
+            <p className="text-[10px] text-slate-500 font-semibold leading-none">Weekly milestones dynamically tailored to your Carbon Persona.</p>
+            <div className="space-y-2.5">
+              {engine.weeklyGoals.map((goal, idx) => (
+                <div key={idx} className="flex items-start gap-3 bg-slate-950/60 border border-white/5 p-3.5 rounded-2xl">
+                  <div className="p-1 rounded bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 mt-0.5 flex-shrink-0">
+                    <Check className="w-3.5 h-3.5" />
+                  </div>
+                  <span className="text-xs text-slate-300 leading-relaxed font-semibold">{goal}</span>
+                </div>
+              ))}
+            </div>
+          </div>
         </div>
       </div>
     </div>
