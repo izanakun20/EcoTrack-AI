@@ -120,11 +120,11 @@ export default function LandingPage({ onStart, hasCalculated }) {
 
         <div className="flex flex-col sm:flex-row gap-4.5 justify-center items-center w-full sm:w-auto">
           <button
-            onClick={onStart}
+            onClick={() => onStart('calculator')}
             className="w-full sm:w-auto flex items-center justify-center gap-2 bg-gradient-to-r from-emerald-500 to-teal-500 hover:from-emerald-400 hover:to-teal-400 text-slate-950 font-black px-8 py-4.5 rounded-xl shadow-lg shadow-emerald-500/20 hover:shadow-emerald-500/35 transition-all duration-300 transform hover:-translate-y-0.5"
           >
             {hasCalculated ? 'Go to Calculator' : 'Compute Carbon Score'}
-            <ArrowRight className="w-5 h-5 text-slate-950" />
+            <ArrowRight className="w-5.5 h-5.5 text-slate-950" />
           </button>
           
           {hasCalculated && (

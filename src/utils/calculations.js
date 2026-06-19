@@ -45,17 +45,26 @@ const SHOPPING_EF = {
  * }
  */
 export function calculateEmissions(inputs) {
-  const {
-    carTravel = 0,
-    bikeTravel = 0,
-    publicTransport = 0,
-    flights = 0,
-    electricity = 0,
-    acUsage = 0,
-    foodHabit = 'mixed',
-    plasticUsage = 'medium',
-    shoppingFrequency = 'average'
-  } = inputs;
+  const clampValue = (val, maxVal = 100000) => {
+    const num = parseFloat(val);
+    if (isNaN(num) || num < 0) return 0;
+    return Math.min(num, maxVal);
+  };
+
+  const foodOptions = ['vegetarian', 'mixed', 'meatHeavy'];
+  const plasticOptions = ['low', 'medium', 'high'];
+  const shoppingOptions = ['rarely', 'average', 'frequently'];
+
+  const carTravel = clampValue(inputs?.carTravel, 300);
+  const bikeTravel = clampValue(inputs?.bikeTravel, 200);
+  const publicTransport = clampValue(inputs?.publicTransport, 300);
+  const flights = clampValue(inputs?.flights, 100);
+  const electricity = clampValue(inputs?.electricity, 10000);
+  const acUsage = clampValue(inputs?.acUsage, 24);
+
+  const foodHabit = foodOptions.includes(inputs?.foodHabit) ? inputs.foodHabit : 'mixed';
+  const plasticUsage = plasticOptions.includes(inputs?.plasticUsage) ? inputs.plasticUsage : 'medium';
+  const shoppingFrequency = shoppingOptions.includes(inputs?.shoppingFrequency) ? inputs.shoppingFrequency : 'average';
 
   // 1. Transportation (Annual kg CO2)
   const carAnnual = carTravel * 365 * EF.carPerKm;
@@ -113,9 +122,11 @@ export function calculateEmissions(inputs) {
  * - 18 tons or above = 0 score (Average US footprint is 16 tons, global average is 4.7)
  */
 export function calculateScore(annualTons) {
+  const tons = parseFloat(annualTons);
+  if (isNaN(tons) || tons < 0) return 100;
   // Linear scale where 0 tons = 100 points, 18 tons = 0 points
   const maxTonsThreshold = 18;
-  const score = Math.max(0, Math.min(100, Math.round(100 - (annualTons / maxTonsThreshold) * 100)));
+  const score = Math.max(0, Math.min(100, Math.round(100 - (tons / maxTonsThreshold) * 100)));
   return score;
 }
 
@@ -123,7 +134,8 @@ export function calculateScore(annualTons) {
  * Returns badge details based on Carbon Score
  */
 export function getScoreDetails(score) {
-  if (score >= 90) {
+  const parsedScore = Math.max(0, Math.min(100, parseInt(score) || 0));
+  if (parsedScore >= 90) {
     return {
       badge: 'Green Hero',
       color: 'from-emerald-400 to-green-500',
@@ -133,7 +145,7 @@ export function getScoreDetails(score) {
       description: 'Exceptional lifestyle! You have an extremely low carbon footprint, matching global sustainable goals.',
       icon: 'ShieldCheck'
     };
-  } else if (score >= 70) {
+  } else if (parsedScore >= 70) {
     return {
       badge: 'Eco Champion',
       color: 'from-teal-400 to-emerald-500',
@@ -143,7 +155,7 @@ export function getScoreDetails(score) {
       description: 'Great job! You make very conscious ecological decisions and maintain a highly sustainable footprint.',
       icon: 'Award'
     };
-  } else if (score >= 50) {
+  } else if (parsedScore >= 50) {
     return {
       badge: 'Eco Explorer',
       color: 'from-sky-400 to-teal-500',
@@ -153,7 +165,7 @@ export function getScoreDetails(score) {
       description: 'You are on your way! Your carbon footprint is moderate, and simple shifts can make a huge impact.',
       icon: 'Compass'
     };
-  } else if (score >= 30) {
+  } else if (parsedScore >= 30) {
     return {
       badge: 'Climate Learner',
       color: 'from-amber-400 to-orange-500',

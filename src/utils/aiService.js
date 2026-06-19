@@ -324,7 +324,17 @@ export function chatWithLocalEcoCoach(userMsg, history, inputs, results) {
   const engine = runSustainabilityDecisionEngine(inputs, results);
   const score = calculateScore(results?.annualTotalTons || 6.8);
 
-  // 1. Help / Reduce / Plan
+  // 1. Weekly eco plan / goals
+  if (cleanMsg.includes("weekly") || cleanMsg.includes("challenge") || cleanMsg.includes("goal")) {
+    let reply = `Here are your personalized weekly goals, tailored for your **${engine.persona.name}** profile:\n\n`;
+    engine.weeklyGoals.forEach((goal, idx) => {
+      reply += `- **Goal ${idx + 1}:** ${goal}\n`;
+    });
+    reply += `\nCompleting these will help improve your overall carbon score of **${score}/100**!`;
+    return reply;
+  }
+
+  // 2. Help / Reduce / Plan
   if (cleanMsg.includes("reduce") || cleanMsg.includes("plan") || cleanMsg.includes("strategy") || cleanMsg.includes("how can i")) {
     const topSource = engine.top3Sources[0];
     let reply = `As a **${engine.persona.name}**, your primary focus should be optimizing **${topSource.name}**, which represents **${topSource.pct}%** of your total carbon output.\n\nHere is your custom strategy:\n`;
@@ -337,23 +347,13 @@ export function chatWithLocalEcoCoach(userMsg, history, inputs, results) {
     return reply;
   }
 
-  // 2. Biggest emission source / reasoning
+  // 3. Biggest emission source / reasoning
   if (cleanMsg.includes("biggest") || cleanMsg.includes("source") || cleanMsg.includes("emission") || cleanMsg.includes("contribute") || cleanMsg.includes("reasoning")) {
     let reply = `Based on our Sustainability Decision Engine (Confidence: **${engine.confidence}%**), your carbon emissions rank as follows:\n\n`;
     engine.top3Sources.forEach((src, idx) => {
       reply += `${idx + 1}. **${src.name}**: ${src.pct}% of total footprint\n`;
     });
     reply += `\n**AI Reasoning:** ${engine.reasoning}`;
-    return reply;
-  }
-
-  // 3. Weekly eco plan / goals
-  if (cleanMsg.includes("weekly") || cleanMsg.includes("plan") || cleanMsg.includes("challenge") || cleanMsg.includes("goal")) {
-    let reply = `Here are your personalized weekly goals, tailored for your **${engine.persona.name}** profile:\n\n`;
-    engine.weeklyGoals.forEach((goal, idx) => {
-      reply += `- **Goal ${idx + 1}:** ${goal}\n`;
-    });
-    reply += `\nCompleting these will help improve your overall carbon score of **${score}/100**!`;
     return reply;
   }
 

@@ -200,16 +200,17 @@ export default function Calculator({ currentInputs, onCalculate, hasCalculated }
                   {/* Car input */}
                   <div>
                     <div className="flex justify-between text-xs mb-2">
-                      <label className="text-slate-300 font-bold flex items-center gap-2">
+                      <label htmlFor="input-car-travel" className="text-slate-300 font-bold flex items-center gap-2">
                         Daily Car Travel (km)
                       </label>
                       <div className="flex items-center gap-1.5">
-                        <button type="button" onClick={() => decrementField('carTravel', 5)} className="p-1 bg-slate-800 border border-white/5 rounded text-slate-400 hover:text-white" aria-label="Decrease"><Minus className="w-3 h-3" /></button>
+                        <button type="button" onClick={() => decrementField('carTravel', 5)} className="p-1 bg-slate-800 border border-white/5 rounded text-slate-400 hover:text-white" aria-label="Decrease daily car travel"><Minus className="w-3 h-3" /></button>
                         <span className="text-emerald-400 font-extrabold text-xs w-14 text-center">{inputs.carTravel} km</span>
-                        <button type="button" onClick={() => incrementField('carTravel', 5, 200)} className="p-1 bg-slate-800 border border-white/5 rounded text-slate-400 hover:text-white" aria-label="Increase"><Plus className="w-3 h-3" /></button>
+                        <button type="button" onClick={() => incrementField('carTravel', 5, 200)} className="p-1 bg-slate-800 border border-white/5 rounded text-slate-400 hover:text-white" aria-label="Increase daily car travel"><Plus className="w-3 h-3" /></button>
                       </div>
                     </div>
                     <input 
+                      id="input-car-travel"
                       type="range" min="0" max="150" step="5"
                       value={inputs.carTravel} 
                       onChange={e => handleInputChange('carTravel', e.target.value)}
@@ -221,16 +222,17 @@ export default function Calculator({ currentInputs, onCalculate, hasCalculated }
                   {/* Bike Input */}
                   <div>
                     <div className="flex justify-between text-xs mb-2">
-                      <label className="text-slate-300 font-bold flex items-center gap-2">
+                      <label htmlFor="input-bike-travel" className="text-slate-300 font-bold flex items-center gap-2">
                         Daily Motorbike Travel (km)
                       </label>
                       <div className="flex items-center gap-1.5">
-                        <button type="button" onClick={() => decrementField('bikeTravel', 5)} className="p-1 bg-slate-800 border border-white/5 rounded text-slate-400 hover:text-white" aria-label="Decrease"><Minus className="w-3 h-3" /></button>
+                        <button type="button" onClick={() => decrementField('bikeTravel', 5)} className="p-1 bg-slate-800 border border-white/5 rounded text-slate-400 hover:text-white" aria-label="Decrease daily motorbike travel"><Minus className="w-3 h-3" /></button>
                         <span className="text-emerald-400 font-extrabold text-xs w-14 text-center">{inputs.bikeTravel} km</span>
-                        <button type="button" onClick={() => incrementField('bikeTravel', 5, 150)} className="p-1 bg-slate-800 border border-white/5 rounded text-slate-400 hover:text-white" aria-label="Increase"><Plus className="w-3 h-3" /></button>
+                        <button type="button" onClick={() => incrementField('bikeTravel', 5, 150)} className="p-1 bg-slate-800 border border-white/5 rounded text-slate-400 hover:text-white" aria-label="Increase daily motorbike travel"><Plus className="w-3 h-3" /></button>
                       </div>
                     </div>
                     <input 
+                      id="input-bike-travel"
                       type="range" min="0" max="100" step="5"
                       value={inputs.bikeTravel} 
                       onChange={e => handleInputChange('bikeTravel', e.target.value)}
@@ -242,16 +244,17 @@ export default function Calculator({ currentInputs, onCalculate, hasCalculated }
                   {/* Public Transit Input */}
                   <div>
                     <div className="flex justify-between text-xs mb-2">
-                      <label className="text-slate-300 font-bold flex items-center gap-2">
+                      <label htmlFor="input-transit-travel" className="text-slate-300 font-bold flex items-center gap-2">
                         Public Transit usage (km/day)
                       </label>
                       <div className="flex items-center gap-1.5">
-                        <button type="button" onClick={() => decrementField('publicTransport', 5)} className="p-1 bg-slate-800 border border-white/5 rounded text-slate-400 hover:text-white" aria-label="Decrease"><Minus className="w-3 h-3" /></button>
+                        <button type="button" onClick={() => decrementField('publicTransport', 5)} className="p-1 bg-slate-800 border border-white/5 rounded text-slate-400 hover:text-white" aria-label="Decrease public transit usage"><Minus className="w-3 h-3" /></button>
                         <span className="text-emerald-400 font-extrabold text-xs w-14 text-center">{inputs.publicTransport} km</span>
-                        <button type="button" onClick={() => incrementField('publicTransport', 5, 200)} className="p-1 bg-slate-800 border border-white/5 rounded text-slate-400 hover:text-white" aria-label="Increase"><Plus className="w-3 h-3" /></button>
+                        <button type="button" onClick={() => incrementField('publicTransport', 5, 200)} className="p-1 bg-slate-800 border border-white/5 rounded text-slate-400 hover:text-white" aria-label="Increase public transit usage"><Plus className="w-3 h-3" /></button>
                       </div>
                     </div>
                     <input 
+                      id="input-transit-travel"
                       type="range" min="0" max="120" step="5"
                       value={inputs.publicTransport} 
                       onChange={e => handleInputChange('publicTransport', e.target.value)}
@@ -263,16 +266,17 @@ export default function Calculator({ currentInputs, onCalculate, hasCalculated }
                   {/* Flights Input */}
                   <div>
                     <div className="flex justify-between text-xs mb-2">
-                      <label className="text-slate-300 font-bold flex items-center gap-2">
+                      <label htmlFor="input-flights" className="text-slate-300 font-bold flex items-center gap-2">
                         Flights taken per Year
                       </label>
                       <div className="flex items-center gap-1.5">
-                        <button type="button" onClick={() => decrementField('flights', 1)} className="p-1 bg-slate-800 border border-white/5 rounded text-slate-400 hover:text-white" aria-label="Decrease"><Minus className="w-3 h-3" /></button>
+                        <button type="button" onClick={() => decrementField('flights', 1)} className="p-1 bg-slate-800 border border-white/5 rounded text-slate-400 hover:text-white" aria-label="Decrease annual flights"><Minus className="w-3 h-3" /></button>
                         <span className="text-emerald-400 font-extrabold text-xs w-14 text-center">{inputs.flights} flights</span>
-                        <button type="button" onClick={() => incrementField('flights', 1, 50)} className="p-1 bg-slate-800 border border-white/5 rounded text-slate-400 hover:text-white" aria-label="Increase"><Plus className="w-3 h-3" /></button>
+                        <button type="button" onClick={() => incrementField('flights', 1, 50)} className="p-1 bg-slate-800 border border-white/5 rounded text-slate-400 hover:text-white" aria-label="Increase annual flights"><Plus className="w-3 h-3" /></button>
                       </div>
                     </div>
                     <input 
+                      id="input-flights"
                       type="range" min="0" max="25" step="1"
                       value={inputs.flights} 
                       onChange={e => handleInputChange('flights', e.target.value)}
@@ -299,16 +303,17 @@ export default function Calculator({ currentInputs, onCalculate, hasCalculated }
                   {/* Electricity Input */}
                   <div>
                     <div className="flex justify-between text-xs mb-2">
-                      <label className="text-slate-300 font-bold flex items-center gap-2">
+                      <label htmlFor="input-electricity" className="text-slate-300 font-bold flex items-center gap-2">
                         Monthly Electricity (kWh)
                       </label>
                       <div className="flex items-center gap-1.5">
-                        <button type="button" onClick={() => decrementField('electricity', 10)} className="p-1 bg-slate-800 border border-white/5 rounded text-slate-400 hover:text-white" aria-label="Decrease"><Minus className="w-3 h-3" /></button>
+                        <button type="button" onClick={() => decrementField('electricity', 10)} className="p-1 bg-slate-800 border border-white/5 rounded text-slate-400 hover:text-white" aria-label="Decrease monthly electricity usage"><Minus className="w-3 h-3" /></button>
                         <span className="text-emerald-400 font-extrabold text-xs w-20 text-center">{inputs.electricity} kWh</span>
-                        <button type="button" onClick={() => incrementField('electricity', 10, 2000)} className="p-1 bg-slate-800 border border-white/5 rounded text-slate-400 hover:text-white" aria-label="Increase"><Plus className="w-3 h-3" /></button>
+                        <button type="button" onClick={() => incrementField('electricity', 10, 2000)} className="p-1 bg-slate-800 border border-white/5 rounded text-slate-400 hover:text-white" aria-label="Increase monthly electricity usage"><Plus className="w-3 h-3" /></button>
                       </div>
                     </div>
                     <input 
+                      id="input-electricity"
                       type="range" min="50" max="1200" step="10"
                       value={inputs.electricity} 
                       onChange={e => handleInputChange('electricity', e.target.value)}
@@ -320,16 +325,17 @@ export default function Calculator({ currentInputs, onCalculate, hasCalculated }
                   {/* AC Input */}
                   <div>
                     <div className="flex justify-between text-xs mb-2">
-                      <label className="text-slate-300 font-bold flex items-center gap-2">
+                      <label htmlFor="input-ac-usage" className="text-slate-300 font-bold flex items-center gap-2">
                         Daily AC usage (Hours)
                       </label>
                       <div className="flex items-center gap-1.5">
-                        <button type="button" onClick={() => decrementField('acUsage', 1)} className="p-1 bg-slate-800 border border-white/5 rounded text-slate-400 hover:text-white" aria-label="Decrease"><Minus className="w-3 h-3" /></button>
+                        <button type="button" onClick={() => decrementField('acUsage', 1)} className="p-1 bg-slate-800 border border-white/5 rounded text-slate-400 hover:text-white" aria-label="Decrease daily AC usage"><Minus className="w-3 h-3" /></button>
                         <span className="text-emerald-400 font-extrabold text-xs w-16 text-center">{inputs.acUsage} hrs</span>
-                        <button type="button" onClick={() => incrementField('acUsage', 1, 24)} className="p-1 bg-slate-800 border border-white/5 rounded text-slate-400 hover:text-white" aria-label="Increase"><Plus className="w-3 h-3" /></button>
+                        <button type="button" onClick={() => incrementField('acUsage', 1, 24)} className="p-1 bg-slate-800 border border-white/5 rounded text-slate-400 hover:text-white" aria-label="Increase daily AC usage"><Plus className="w-3 h-3" /></button>
                       </div>
                     </div>
                     <input 
+                      id="input-ac-usage"
                       type="range" min="0" max="24" step="1"
                       value={inputs.acUsage} 
                       onChange={e => handleInputChange('acUsage', e.target.value)}
@@ -352,12 +358,12 @@ export default function Calculator({ currentInputs, onCalculate, hasCalculated }
                   <p className="text-slate-400 text-xs mt-1">Submit dietary and plastic trash variables.</p>
                 </div>
 
-                <div className="space-y-6">
+                 <div className="space-y-6">
                   {/* Food habit select */}
-                  <div>
-                    <label className="text-slate-300 text-xs font-bold block mb-3">
+                  <fieldset className="border-none p-0 m-0">
+                    <legend className="text-slate-300 text-xs font-bold block mb-3">
                       Food Diet Habits
-                    </label>
+                    </legend>
                     <div className="grid grid-cols-3 gap-3">
                       {[
                         { id: 'vegetarian', label: 'Vegetarian', desc: 'No meat, plant heavy', emoji: '🥬' },
@@ -368,25 +374,26 @@ export default function Calculator({ currentInputs, onCalculate, hasCalculated }
                           key={opt.id}
                           type="button"
                           onClick={() => handleInputChange('foodHabit', opt.id)}
+                          aria-pressed={inputs.foodHabit === opt.id}
                           className={`p-4.5 border rounded-2xl flex flex-col items-center text-center transition-all duration-300 scale-100 hover:scale-[1.03] outline-none focus-visible:ring-2 focus-visible:ring-emerald-400 ${
                             inputs.foodHabit === opt.id
                               ? 'border-emerald-500 bg-emerald-500/10 text-white shadow-[0_0_20px_rgba(16,185,129,0.25)] ring-1 ring-emerald-500'
                               : 'border-white/5 bg-slate-950/40 text-slate-400 hover:border-white/10 hover:bg-slate-950/60'
                           }`}
                         >
-                          <span className="text-3xl mb-2.5 filter drop-shadow-[0_2px_8px_rgba(255,255,255,0.05)] animate-float">{opt.emoji}</span>
+                          <span className="text-3xl mb-2.5 filter drop-shadow-[0_2px_8px_rgba(255,255,255,0.05)] animate-float" aria-hidden="true">{opt.emoji}</span>
                           <span className="text-xs font-black mb-1">{opt.label}</span>
                           <span className="text-[9px] leading-snug text-slate-500 font-medium">{opt.desc}</span>
                         </button>
                       ))}
                     </div>
-                  </div>
+                  </fieldset>
 
                   {/* Plastic usage select */}
-                  <div>
-                    <label className="text-slate-300 text-xs font-bold block mb-3">
+                  <fieldset className="border-none p-0 m-0">
+                    <legend className="text-slate-300 text-xs font-bold block mb-3">
                       Plastic Waste Generation
-                    </label>
+                    </legend>
                     <div className="grid grid-cols-3 gap-3">
                       {[
                         { id: 'low', label: 'Eco-conscious', desc: 'Active recycling', emoji: '♻️' },
@@ -397,25 +404,26 @@ export default function Calculator({ currentInputs, onCalculate, hasCalculated }
                           key={opt.id}
                           type="button"
                           onClick={() => handleInputChange('plasticUsage', opt.id)}
+                          aria-pressed={inputs.plasticUsage === opt.id}
                           className={`p-4.5 border rounded-2xl flex flex-col items-center text-center transition-all duration-300 scale-100 hover:scale-[1.03] outline-none focus-visible:ring-2 focus-visible:ring-sky-400 ${
                             inputs.plasticUsage === opt.id
                               ? 'border-sky-500 bg-sky-500/10 text-white shadow-[0_0_20px_rgba(56,189,248,0.25)] ring-1 ring-sky-500'
                               : 'border-white/5 bg-slate-950/40 text-slate-400 hover:border-white/10 hover:bg-slate-950/60'
                           }`}
                         >
-                          <span className="text-3xl mb-2.5 filter drop-shadow-[0_2px_8px_rgba(255,255,255,0.05)] animate-float">{opt.emoji}</span>
+                          <span className="text-3xl mb-2.5 filter drop-shadow-[0_2px_8px_rgba(255,255,255,0.05)] animate-float" aria-hidden="true">{opt.emoji}</span>
                           <span className="text-xs font-black mb-1">{opt.label}</span>
                           <span className="text-[9px] leading-snug text-slate-500 font-medium">{opt.desc}</span>
                         </button>
                       ))}
                     </div>
-                  </div>
+                  </fieldset>
 
                   {/* Shopping frequency select */}
-                  <div>
-                    <label className="text-slate-300 text-xs font-bold block mb-3">
+                  <fieldset className="border-none p-0 m-0">
+                    <legend className="text-slate-300 text-xs font-bold block mb-3">
                       Shopping Frequency
-                    </label>
+                    </legend>
                     <div className="grid grid-cols-3 gap-3">
                       {[
                         { id: 'rarely', label: 'Minimalist', desc: 'Essentials only', emoji: '📦' },
@@ -426,21 +434,22 @@ export default function Calculator({ currentInputs, onCalculate, hasCalculated }
                           key={opt.id}
                           type="button"
                           onClick={() => handleInputChange('shoppingFrequency', opt.id)}
+                          aria-pressed={inputs.shoppingFrequency === opt.id}
                           className={`p-4.5 border rounded-2xl flex flex-col items-center text-center transition-all duration-300 scale-100 hover:scale-[1.03] outline-none focus-visible:ring-2 focus-visible:ring-violet-400 ${
                             inputs.shoppingFrequency === opt.id
                               ? 'border-violet-500 bg-violet-500/10 text-white shadow-[0_0_20px_rgba(167,139,250,0.25)] ring-1 ring-violet-500'
                               : 'border-white/5 bg-slate-950/40 text-slate-400 hover:border-white/10 hover:bg-slate-950/60'
                           }`}
                         >
-                          <span className="text-3xl mb-2.5 filter drop-shadow-[0_2px_8px_rgba(255,255,255,0.05)] animate-float">{opt.emoji}</span>
+                          <span className="text-3xl mb-2.5 filter drop-shadow-[0_2px_8px_rgba(255,255,255,0.05)] animate-float" aria-hidden="true">{opt.emoji}</span>
                           <span className="text-xs font-black mb-1">{opt.label}</span>
                           <span className="text-[9px] leading-snug text-slate-500 font-medium">{opt.desc}</span>
                         </button>
                       ))}
                     </div>
+                  </fieldset>
                   </div>
                 </div>
-              </div>
             )}
 
             {/* STEP 4: CALCULATED RESULTS */}

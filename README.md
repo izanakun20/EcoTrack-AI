@@ -119,3 +119,34 @@ Create the optimized production asset bundle:
 npm run build
 ```
 The build artifact will be generated under `/dist`, ready for deployment on platforms like Netlify.
+
+### 5. Running the Test Suite
+We have configured a robust, complete testing suite using **Vitest** and **React Testing Library** to validate standard and boundary inputs, localStorage hooks, NLP coaches, and rendering:
+```bash
+# Run tests once (CI mode)
+npm run test
+```
+
+---
+
+## 🔒 Security & Data Integrity Safeguards
+
+1. **Input Clamping & Validation:**
+   - Values entered into the carbon calculator are programmatically validated and clamped to realistic physical boundaries in `calculations.js` (e.g., flight logs capped at 100/yr, travel distance capped at 300km/day, AC hours capped at 24/day).
+   - Negative numbers and invalid string categories default back to medium mixed averages, preventing system crashes or division-by-zero errors.
+2. **Defensive Storage Parsing:**
+   - The custom storage hook `useLocalStorage.js` is fortified to handle parsing crashes. If corrupted data or structural modifications exist in the browser cache, it automatically clears that key and falls back to a clean initial state.
+3. **No External Attack Vectors:**
+   - Since all AI recommendation and NLP engines execute locally, no user footprint data or conversation logs are sent over the network, completely avoiding API interception attacks or data leaks.
+
+---
+
+## ♿ Accessibility (a11y) Compliance
+
+The application has been audited and optimized to meet accessibility standards:
+- **Keyboard Navigation:** All interactive navigation elements (sidebar, mobile top headers, logo routes) support full keyboard accessibility (`Tab`, `Enter`, `Space`) with noticeable `focus-visible` emerald rings.
+- **Form Controls:** Every slider input is explicitly linked to its visual control via `htmlFor` and `id` properties.
+- **Semantic Groupings:** Radio-like button selectors (e.g., Diet Habits, Plastic Waste) are structured inside `<fieldset>` elements with descriptive `<legend>` tags, using `aria-pressed` to define the selected state.
+- **Chart Screen Reader Wrappers:** Recharts graphical dashboards are wrapped with `role="region"` and clear `aria-label` summaries explaining chart contexts to screen readers.
+- **Escaped Text Rendering:** The local chatbot assistant handles text formatting via a secure markdown parser that prevents unescaped HTML render paths.
+

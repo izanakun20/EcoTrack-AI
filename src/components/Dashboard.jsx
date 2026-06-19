@@ -388,7 +388,7 @@ export default function Dashboard({
                 </span>
               </div>
 
-              <div className="h-[220px] w-full">
+              <div className="h-[220px] w-full" role="region" aria-label="Carbon Progression Trend Chart">
                 <ResponsiveContainer width="100%" height="100%">
                   <AreaChart data={trendChartData} margin={{ left: -25, right: 10, top: 10, bottom: 5 }}>
                     <defs>
@@ -418,7 +418,7 @@ export default function Dashboard({
               <h3 className="font-bold text-white text-base mb-1">Carbon Breakdown by Category</h3>
               <p className="text-[10px] text-slate-500 mb-5 font-medium">Annual carbon footprint representation across components (Tons/Yr).</p>
               
-              <div className="h-[180px] w-full">
+              <div className="h-[180px] w-full" role="region" aria-label="Carbon Breakdown by Category Chart">
                 <ResponsiveContainer width="100%" height="100%">
                   <BarChart data={categoryChartData} margin={{ left: -25, right: 10, top: 5, bottom: 5 }}>
                     <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.05)" vertical={false} />

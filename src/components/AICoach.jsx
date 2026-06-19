@@ -26,6 +26,63 @@ const CATEGORY_ICONS = {
   lifestyle: ShoppingBag
 };
 
+const renderMessageText = (text) => {
+  if (!text) return null;
+  const lines = text.split('\n');
+  return lines.map((line, lineIdx) => {
+    let cleanLine = line.trim();
+    if (!cleanLine) return <div key={lineIdx} className="h-2" />;
+    
+    let isBullet = false;
+    let isNumbered = false;
+    let numberPrefix = '';
+    
+    if (cleanLine.startsWith('- ') || cleanLine.startsWith('* ')) {
+      isBullet = true;
+      cleanLine = cleanLine.substring(2);
+    } else {
+      const match = cleanLine.match(/^(\d+\.)\s+/);
+      if (match) {
+        isNumbered = true;
+        numberPrefix = match[1];
+        cleanLine = cleanLine.substring(match[0].length);
+      }
+    }
+    
+    const parts = cleanLine.split(/\*\*([^*]+)\*\*/g);
+    const parsedLine = parts.map((part, index) => {
+      if (index % 2 === 1) {
+        return <strong key={index} className="font-extrabold text-white">{part}</strong>;
+      }
+      return part;
+    });
+    
+    if (isBullet) {
+      return (
+        <div key={lineIdx} className="pl-2 mb-1.5 flex items-start gap-2">
+          <span className="text-emerald-400 select-none">•</span>
+          <span className="flex-grow">{parsedLine}</span>
+        </div>
+      );
+    }
+    
+    if (isNumbered) {
+      return (
+        <div key={lineIdx} className="pl-2 mb-1.5 flex items-start gap-2">
+          <span className="text-emerald-400 font-bold select-none">{numberPrefix}</span>
+          <span className="flex-grow">{parsedLine}</span>
+        </div>
+      );
+    }
+    
+    return (
+      <p key={lineIdx} className={lineIdx < lines.length - 1 ? "mb-2" : ""}>
+        {parsedLine}
+      </p>
+    );
+  });
+};
+
 export default function AICoach({ 
   inputs, 
   results, 
@@ -411,7 +468,7 @@ export default function AICoach({
                       ? 'bg-emerald-500 text-slate-950 rounded-tr-none font-bold shadow-md shadow-emerald-500/5'
                       : 'bg-slate-950/60 border border-white/5 text-slate-200 rounded-tl-none leading-relaxed font-medium'
                   }`}>
-                    {m.text}
+                    {m.sender === 'user' ? m.text : renderMessageText(m.text)}
                   </div>
                   <span className="text-[9px] text-slate-650 mt-1 px-1">{m.time}</span>
                 </div>
@@ -438,6 +495,8 @@ export default function AICoach({
                 value={inputVal}
                 onChange={e => setInputVal(e.target.value)}
                 className="glass-input flex-grow px-4 py-2.5 rounded-xl text-xs"
+                aria-label="Ask AI Eco Coach message input"
+                id="ai-coach-input"
               />
               <button
                 type="submit"

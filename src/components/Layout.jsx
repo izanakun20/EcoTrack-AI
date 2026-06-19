@@ -50,7 +50,18 @@ export default function Layout({
 
       {/* Mobile Top Navbar */}
       <header className="md:hidden glass-navbar sticky top-0 z-50 px-5 py-4 flex items-center justify-between text-white shadow-xl">
-        <div className="flex items-center gap-2.5 cursor-pointer" onClick={() => setActiveTab('landing')}>
+        <div 
+          role="button"
+          tabIndex={0}
+          onKeyDown={(e) => {
+            if (e.key === 'Enter' || e.key === ' ') {
+              setActiveTab('landing');
+            }
+          }}
+          className="flex items-center gap-2.5 cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-500 rounded-lg p-1" 
+          onClick={() => setActiveTab('landing')}
+          aria-label="EcoTrack AI Home"
+        >
           <div className="bg-emerald-500/10 p-2 rounded-xl border border-emerald-500/30">
             <Leaf className="w-5 h-5 text-emerald-400" />
           </div>
@@ -69,7 +80,7 @@ export default function Layout({
           
           <button 
             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-            className="p-1.5 text-slate-300 hover:text-white bg-slate-900/60 border border-white/5 rounded-xl"
+            className="p-1.5 text-slate-300 hover:text-white bg-slate-900/60 border border-white/5 rounded-xl focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-500"
             aria-label="Toggle menu"
           >
             {mobileMenuOpen ? <X className="w-5.5 h-5.5" /> : <Menu className="w-5.5 h-5.5" />}
@@ -82,8 +93,16 @@ export default function Layout({
         <div>
           {/* Logo */}
           <div 
-            className="flex items-center gap-3.5 mb-10 cursor-pointer hover:opacity-90 transition-opacity" 
+            role="button"
+            tabIndex={0}
+            onKeyDown={(e) => {
+              if (e.key === 'Enter' || e.key === ' ') {
+                setActiveTab('landing');
+              }
+            }}
+            className="flex items-center gap-3.5 mb-10 cursor-pointer hover:opacity-90 transition-opacity focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-500 rounded-2xl p-1" 
             onClick={() => setActiveTab('landing')}
+            aria-label="EcoTrack AI Home"
           >
             <div className="bg-gradient-to-br from-emerald-500/20 to-teal-500/10 p-3 rounded-2xl border border-emerald-500/30 shadow-lg shadow-emerald-500/5">
               <Leaf className="w-6 h-6 text-emerald-400" />
@@ -110,7 +129,7 @@ export default function Layout({
                   key={item.id}
                   onClick={() => !disabled && handleTabClick(item.id)}
                   aria-label={item.label}
-                  className={`w-full flex items-center gap-3.5 px-4.5 py-3.5 rounded-xl text-xs font-bold transition-all duration-300 transform ${
+                  className={`w-full flex items-center gap-3.5 px-4.5 py-3.5 rounded-xl text-xs font-bold transition-all duration-300 transform focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-500 ${
                     active 
                       ? 'bg-emerald-500/10 border border-emerald-500/30 text-emerald-400 shadow-[0_4px_20px_-3px_rgba(16,185,129,0.15)] translate-x-1' 
                       : disabled 
@@ -168,7 +187,7 @@ export default function Layout({
                 <button
                   key={item.id}
                   onClick={() => !disabled && handleTabClick(item.id)}
-                  className={`w-full flex items-center gap-4.5 px-5 py-4.5 rounded-2xl text-sm font-bold transition-all ${
+                  className={`w-full flex items-center gap-4.5 px-5 py-4.5 rounded-2xl text-sm font-bold transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-500 ${
                     active 
                       ? 'bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 shadow-md' 
                       : disabled 
