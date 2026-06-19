@@ -93,7 +93,7 @@ export default function Layout({
                 EcoTrack AI
               </h1>
               <span className="text-[9px] text-slate-500 uppercase tracking-widest font-extrabold flex items-center gap-1 mt-0.5">
-                <Globe className="w-2.5 h-2.5 text-emerald-500" /> Startup Carbon Guard
+                <Globe className="w-2.5 h-2.5 text-emerald-500" /> AI-Powered Sustainability Platform
               </span>
             </div>
           </div>
