@@ -73,7 +73,8 @@ Make sure you have [Node.js](https://nodejs.org/) installed (v16.0 or higher rec
 In your terminal, navigate to the project directory:
 ```bash
 # Recommended active workspace path
-C:\Users\siddh\.gemini\antigravity\scratch\ecotrack-ai
+git clone https://github.com/izanakun20/EcoTrack-AI.git
+cd EcoTrack-AI
 ```
 
 ### 2. Install Dependencies
