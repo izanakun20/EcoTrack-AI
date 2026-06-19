@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { useLocalStorage } from './hooks/useLocalStorage';
 import Layout from './components/Layout';
 import LandingPage from './components/LandingPage';
@@ -12,6 +12,8 @@ import Profile from './components/Profile';
 import Insights from './components/Insights';
 import { initialChallenges, badgesList, defaultState } from './data/environmentalData';
 import { calculateEmissions, calculateScore } from './utils/calculations';
+import { generateLocalInsight, generateLocalRecommendations } from './utils/aiService';
+import { Award } from 'lucide-react';
 
 export default function App() {
   const [activeTab, setActiveTab] = useLocalStorage('ecotrack_tab', 'landing');
@@ -24,6 +26,15 @@ export default function App() {
   const [activeGoalsList, setActiveGoalsList] = useLocalStorage('ecotrack_active_goals', []);
   const [goalsState, setGoalsState] = useLocalStorage('ecotrack_goals_state', defaultState.goals);
 
+  // Gemini state triggers
+  const [aiInsight, setAiInsight] = useLocalStorage('ecotrack_ai_insight', null);
+  const [aiInsightLoading, setAiInsightLoading] = useState(false);
+  const [aiRecommendations, setAiRecommendations] = useLocalStorage('ecotrack_ai_recs', []);
+  const [aiRecommendationsLoading, setAiRecommendationsLoading] = useState(false);
+
+  // New slide-in badge unlock toast state
+  const [unlockedBadgeToast, setUnlockedBadgeToast] = useState(null);
+
   // Re-calculate score helper
   const annualTons = results?.annualTotalTons || 0;
   const score = results ? calculateScore(annualTons) : 0;
@@ -34,22 +45,89 @@ export default function App() {
     setResults(calculatedResults);
     setHasCalculated(true);
     
-    // Unlock beginner badge
-    let updatedBadges = [...badges];
-    updatedBadges = updatedBadges.map(b => {
-      if (b.id === 'badge-beginner') return { ...b, unlocked: true };
-      
-      const newScore = calculateScore(calculatedResults.annualTotalTons);
-      if (b.id === 'badge-warrior' && newScore >= 70) return { ...b, unlocked: true };
-      
-      // Sustainability master check
-      const completedCount = challenges.filter(c => c.completed).length;
-      if (b.id === 'badge-master' && newScore >= 90 && completedCount >= 5) return { ...b, unlocked: true };
-      
+    // Clear old AI cache
+    setAiInsight(null);
+    setAiRecommendations([]);
+
+    // Trigger AI compilation loaders with simulated delay for professional feel
+    setAiInsightLoading(true);
+    setAiRecommendationsLoading(true);
+    
+    setTimeout(() => {
+      const insight = generateLocalInsight(newInputs, calculatedResults);
+      setAiInsight(insight);
+      setAiInsightLoading(false);
+    }, 1200);
+
+    setTimeout(() => {
+      const recs = generateLocalRecommendations(newInputs, calculatedResults);
+      setAiRecommendations(recs);
+      setAiRecommendationsLoading(false);
+    }, 1600);
+  };
+
+  // Backfill AI data if user refreshed or loads an existing calculation
+  useEffect(() => {
+    if (hasCalculated && results && !aiInsight && !aiInsightLoading) {
+      setAiInsightLoading(true);
+      setTimeout(() => {
+        const res = generateLocalInsight(inputs, results);
+        setAiInsight(res);
+        setAiInsightLoading(false);
+      }, 600);
+    }
+    if (hasCalculated && results && (!aiRecommendations || aiRecommendations.length === 0) && !aiRecommendationsLoading) {
+      setAiRecommendationsLoading(true);
+      setTimeout(() => {
+        const res = generateLocalRecommendations(inputs, results);
+        setAiRecommendations(res);
+        setAiRecommendationsLoading(false);
+      }, 900);
+    }
+  }, [hasCalculated, results]);
+
+  // Centralized Badge Unlocker Trigger
+  useEffect(() => {
+    if (!hasCalculated || !results) return;
+
+    const completedCount = challenges.filter(c => c.completed).length;
+    const goalsCount = activeGoalsList.length;
+
+    const updated = badges.map(b => {
+      let shouldUnlock = b.unlocked;
+
+      if (b.id === 'badge-beginner') {
+        shouldUnlock = true;
+      } else if (b.id === 'badge-explorer') {
+        shouldUnlock = score >= 60;
+      } else if (b.id === 'badge-crusher') {
+        shouldUnlock = goalsCount >= 2;
+      } else if (b.id === 'badge-defender') {
+        shouldUnlock = completedCount >= 3;
+      } else if (b.id === 'badge-master') {
+        shouldUnlock = score >= 85 && completedCount >= 5;
+      } else if (b.id === 'badge-guardian') {
+        shouldUnlock = score >= 90 && completedCount >= 7 && goalsCount >= 3;
+      }
+
+      if (shouldUnlock !== b.unlocked) {
+        // Trigger Toast for new unlock!
+        if (shouldUnlock === true) {
+          setUnlockedBadgeToast(b);
+          setTimeout(() => {
+            setUnlockedBadgeToast(null);
+          }, 4500);
+        }
+        return { ...b, unlocked: shouldUnlock };
+      }
       return b;
     });
-    setBadges(updatedBadges);
-  };
+
+    const hasChanged = updated.some((b, i) => b.unlocked !== badges[i].unlocked);
+    if (hasChanged) {
+      setBadges(updated);
+    }
+  }, [hasCalculated, results, score, challenges, activeGoalsList, badges]);
 
   // Complete a challenge
   const handleCompleteChallenge = (id, challengePoints) => {
@@ -59,15 +137,6 @@ export default function App() {
     setChallenges(updatedChallenges);
     const newPoints = points + challengePoints;
     setPoints(newPoints);
-
-    // Badges checks
-    const completedCount = updatedChallenges.filter(c => c.completed).length;
-    const updatedBadges = badges.map(b => {
-      if (b.id === 'badge-defender' && completedCount >= 3) return { ...b, unlocked: true };
-      if (b.id === 'badge-master' && score >= 90 && completedCount >= 5) return { ...b, unlocked: true };
-      return b;
-    });
-    setBadges(updatedBadges);
   };
 
   // Add commitment/goal from AI Coach
@@ -75,13 +144,6 @@ export default function App() {
     if (activeGoalsList.some(g => g.title === title)) return;
     const newGoals = [...activeGoalsList, { title, savings }];
     setActiveGoalsList(newGoals);
-
-    // Unlock cutter badge
-    const updatedBadges = badges.map(b => {
-      if (b.id === 'badge-cutter') return { ...b, unlocked: true };
-      return b;
-    });
-    setBadges(updatedBadges);
   };
 
   // Remove goal
@@ -94,13 +156,6 @@ export default function App() {
     if (activeGoalsList.some(g => g.title === title)) return;
     const newGoals = [...activeGoalsList, { title, savings: 25 }]; // default custom savings estimate
     setActiveGoalsList(newGoals);
-
-    // Unlock cutter badge
-    const updatedBadges = badges.map(b => {
-      if (b.id === 'badge-cutter') return { ...b, unlocked: true };
-      return b;
-    });
-    setBadges(updatedBadges);
   };
 
   // Reset entire dashboard local storage values
@@ -114,6 +169,8 @@ export default function App() {
     setBadges(badgesList);
     setActiveGoalsList([]);
     setGoalsState(defaultState.goals);
+    setAiInsight(null);
+    setAiRecommendations([]);
     window.localStorage.clear();
   };
 
@@ -133,7 +190,9 @@ export default function App() {
             state={{ points, history: defaultState.history, challenges }} 
             results={results} 
             activeGoalsList={activeGoalsList}
-            setActiveTab={setActiveTab} 
+            setActiveTab={setActiveTab}
+            aiInsight={aiInsight}
+            aiInsightLoading={aiInsightLoading} 
           />
         );
       case 'calculator':
@@ -151,7 +210,9 @@ export default function App() {
             results={results} 
             activeGoals={activeGoalsList.map(g => g.title)} 
             onAddGoal={handleAddGoal} 
-            points={points} 
+            points={points}
+            aiRecommendations={aiRecommendations}
+            aiRecommendationsLoading={aiRecommendationsLoading} 
           />
         );
       case 'challenges':
@@ -216,6 +277,21 @@ export default function App() {
       score={score}
       hasCalculated={hasCalculated}
     >
+      {/* Dynamic Slide-in Badge Toast */}
+      {unlockedBadgeToast && (
+        <div className="fixed top-5 left-1/2 z-50 animate-toast-slide">
+          <div className="glass-card border border-emerald-500/30 bg-slate-900/90 backdrop-blur-xl px-6 py-4 rounded-2xl flex items-center gap-4 shadow-[0_15px_40px_rgba(16,185,129,0.25)] border-emerald-400/30">
+            <div className={`p-2.5 rounded-xl bg-gradient-to-br ${unlockedBadgeToast.color} text-slate-950 flex-shrink-0 shadow-lg shadow-emerald-500/20`}>
+              <Award className="w-6 h-6 text-slate-950" />
+            </div>
+            <div>
+              <span className="text-[9px] text-emerald-400 font-extrabold uppercase tracking-widest block">Achievement Unlocked!</span>
+              <h4 className="font-extrabold text-sm text-white mt-0.5">{unlockedBadgeToast.title}</h4>
+              <p className="text-[10px] text-slate-400 leading-tight mt-0.5">{unlockedBadgeToast.description}</p>
+            </div>
+          </div>
+        </div>
+      )}
       {renderPage()}
     </Layout>
   );

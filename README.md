@@ -1,6 +1,6 @@
-# EcoTrack AI - AI-Powered Carbon Footprint Awareness Platform
+# EcoTrack AI – AI-Powered Carbon Footprint Awareness Platform
 
-EcoTrack AI is a modern, responsive, and gamified web application designed to help users track, understand, and reduce their carbon footprint through personalized AI insights, weekly eco-challenges, achievements, and goal setting.
+EcoTrack AI is a next-generation, responsive, and gamified sustainability platform designed to help users track, understand, and reduce their carbon footprint through personalized AI insights, real-time calculation simulators, weekly eco-challenges, achievements, and goal setting.
 
 ## Problem Statement
 
@@ -26,7 +26,28 @@ Individuals often struggle to understand the environmental impact of their daily
 
 ---
 
-## Folder Structure
+## 🤖 Advanced Local AI Engine & Architecture
+
+EcoTrack AI runs on a fully client-side, private, and zero-latency **Local AI Engine** ([aiService.js](file:///C:/Users/siddh/eco-track-ai/src/utils/aiService.js)):
+1. **Dynamic Sustainability Insights:** Evaluates category footprint breakdowns to generate custom sustainability advices based on the user's primary emission category.
+2. **Generative Reduction Plans:** Generates structured recommendations based on live calculator coefficients, detailing specific titles, descriptions, categories, priority tags, difficulty rankings, and annual carbon savings.
+3. **Conversational AI Coach Chatbot:** A ChatGPT-style chat assistant that parses message contexts and carbon calculations to yield tailored, encouraging sustainability plans with natural typing animations.
+4. **No API Dependencies:** Since everything is computed locally in the browser, the application requires **no internet connection**, **no API keys** (Gemini/OpenAI/HuggingFace), has **zero latency**, and guarantees **100% data privacy**.
+
+---
+
+## 🎨 Premium Visual Features
+
+- **Ambient Glowing Mesh Lights:** Built using CSS-based keyframe animations shifting radial blurs in the background.
+- **Vibrant Interactive Charts:** Recharts customized with gradient area charts, thin transparent grids, and custom tooltip overlays.
+- **Multi-Step Calculator Simulator:** Multi-step card wizard with decrement/increment controls alongside a **Live Estimator Sidebar** that reflects inputs instantly.
+- **AI Scanning Loader:** A full-screen translucent overlay simulating data calibration and index parsing when compute is triggered.
+- **Upgraded Badges Milestones:** Six gamified achievement medals with lock states and progress percentages computed via state dependencies.
+- **Difficulty-Rated Challenges:** Active quest cards classified into categories (`transport`, `energy`, `waste`, `food`, `community`) with difficulty settings (`Easy`, `Medium`, `Hard`) and checklist tasks.
+
+---
+
+## 📦 Folder Structure
 
 ```
 ecotrack-ai/
@@ -54,17 +75,15 @@ ecotrack-ai/
     ├── hooks/
     │   └── useLocalStorage.js
     ├── utils/
-    │   └── calculations.js
+    │   ├── calculations.js
+    │   └── aiService.js
     └── data/
-        ├── environmentalData.js
-        └── defaultState.js
+        └── environmentalData.js
 ```
 
 ---
 
-## Getting Started
-
-Follow these steps to run the application on your local machine:
+## ⚙️ Local Setup Instructions
 
 ### Prerequisites
 Make sure you have [Node.js](https://nodejs.org/) installed (v16.0 or higher recommended).
@@ -88,11 +107,11 @@ Start the Vite local development server:
 ```bash
 npm run dev
 ```
-Once started, open [http://localhost:5173](http://localhost:5173) in your browser to view the application.
+Open [http://localhost:5173](http://localhost:5173) in your browser to view the application.
 
 ### 4. Build for Production
-Create the production bundle:
+Create the optimized production asset bundle:
 ```bash
 npm run build
 ```
-This scaffolds the optimized production asset bundle under the `/dist` directory, ready to deploy directly on static hosting providers like Netlify or Vercel.
+The build artifact will be generated under `/dist`, ready for deployment on platforms like Netlify.

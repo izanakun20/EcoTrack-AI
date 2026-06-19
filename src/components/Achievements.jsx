@@ -7,8 +7,8 @@ import {
   TrendingDown, 
   Zap, 
   HelpCircle,
-  CheckCircle,
-  Trophy
+  Trophy,
+  Globe
 } from 'lucide-react';
 
 const ICON_MAP = {
@@ -28,7 +28,7 @@ export default function Achievements({
 }) {
   const unlockedCount = badges.filter(b => b.unlocked).length;
 
-  // Calculate progression stats per badge id
+  // Calculate progression details per badge id
   const getBadgeProgress = (id) => {
     switch (id) {
       case 'badge-beginner':
@@ -36,15 +36,23 @@ export default function Achievements({
           current: hasCalculated ? 1 : 0,
           target: 1,
           percent: hasCalculated ? 100 : 0,
-          text: hasCalculated ? "Done" : "0 / 1 Calculated"
+          text: hasCalculated ? "Done" : "0 / 1 Completed"
         };
-      case 'badge-warrior':
-        const wPercent = Math.min(100, Math.round((score / 70) * 100));
+      case 'badge-explorer':
+        const wPercent = Math.min(100, Math.round((score / 60) * 100));
         return {
           current: score,
-          target: 70,
+          target: 60,
           percent: wPercent,
-          text: `Score: ${score} / 70`
+          text: `Score: ${score} / 60`
+        };
+      case 'badge-crusher':
+        const crusherPercent = Math.min(100, Math.round((activeGoalsCount / 2) * 100));
+        return {
+          current: activeGoalsCount,
+          target: 2,
+          percent: crusherPercent,
+          text: `Goals: ${activeGoalsCount} / 2`
         };
       case 'badge-defender':
         const dPercent = Math.min(100, Math.round((completedChallengesCount / 3) * 100));
@@ -54,23 +62,26 @@ export default function Achievements({
           percent: dPercent,
           text: `Challenges: ${completedChallengesCount} / 3`
         };
-      case 'badge-cutter':
-        const targetVal = activeGoalsCount > 0 ? 1 : 0;
-        return {
-          current: targetVal,
-          target: 1,
-          percent: targetVal * 100,
-          text: activeGoalsCount > 0 ? "Goal Set" : "0 / 1 Goals"
-        };
       case 'badge-master':
-        const scorePassed = score >= 90 ? 1 : 0;
-        const questsPassed = completedChallengesCount >= 5 ? 1 : 0;
-        const mPercent = Math.round(((scorePassed + questsPassed) / 2) * 100);
+        const scorePassedM = score >= 85 ? 1 : 0;
+        const questsPassedM = completedChallengesCount >= 5 ? 1 : 0;
+        const mPercent = Math.round(((scorePassedM + questsPassedM) / 2) * 100);
         return {
-          current: scorePassed + questsPassed,
+          current: scorePassedM + questsPassedM,
           target: 2,
           percent: mPercent,
-          text: `Score >= 90: ${score >= 90 ? 'Yes' : 'No'} | Quests: ${completedChallengesCount}/5`
+          text: `Score >= 85: ${score >= 85 ? 'Yes' : 'No'} | Quests: ${completedChallengesCount}/5`
+        };
+      case 'badge-guardian':
+        const scorePassedG = score >= 90 ? 1 : 0;
+        const questsPassedG = completedChallengesCount >= 7 ? 1 : 0;
+        const goalsPassedG = activeGoalsCount >= 3 ? 1 : 0;
+        const gPercent = Math.round(((scorePassedG + questsPassedG + goalsPassedG) / 3) * 100);
+        return {
+          current: scorePassedG + questsPassedG + goalsPassedG,
+          target: 3,
+          percent: gPercent,
+          text: `Score 90+: ${score >= 90 ? 'Yes' : 'No'} | Quests: ${completedChallengesCount}/7 | Goals: ${activeGoalsCount}/3`
         };
       default:
         return { current: 0, target: 1, percent: 0, text: "" };
@@ -86,7 +97,7 @@ export default function Achievements({
           Eco Achievements & Badges
         </h2>
         <p className="text-slate-400 text-sm font-medium">
-          Unlock achievements by taking green choices and completing sustainable milestones.
+          Unlock prestigious achievements by hitting sustainable carbon goals and completing challenges.
         </p>
       </div>
 
@@ -99,7 +110,7 @@ export default function Achievements({
           <div>
             <h3 className="font-extrabold text-white text-base md:text-lg mb-0.5">Your Ecological Badges Status</h3>
             <p className="text-slate-400 text-xs font-medium">
-              Collect all badges to attain the ultimate "Sustainability Pioneer" title.
+              Earn and claim medals to lock in your title as an Earth Guardian.
             </p>
           </div>
         </div>

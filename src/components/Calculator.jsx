@@ -360,22 +360,23 @@ export default function Calculator({ currentInputs, onCalculate, hasCalculated }
                     </label>
                     <div className="grid grid-cols-3 gap-3">
                       {[
-                        { id: 'vegetarian', label: 'Vegetarian', desc: 'No meat, plant heavy' },
-                        { id: 'mixed', label: 'Mixed Diet', desc: 'Moderate poultry/fish' },
-                        { id: 'meatHeavy', label: 'Heavy Meat', desc: 'Red meat daily' }
+                        { id: 'vegetarian', label: 'Vegetarian', desc: 'No meat, plant heavy', emoji: '🥬' },
+                        { id: 'mixed', label: 'Mixed Diet', desc: 'Moderate poultry/fish', emoji: '🍗' },
+                        { id: 'meatHeavy', label: 'Heavy Meat', desc: 'Red meat daily', emoji: '🥩' }
                       ].map(opt => (
                         <button
                           key={opt.id}
                           type="button"
                           onClick={() => handleInputChange('foodHabit', opt.id)}
-                          className={`p-3.5 border rounded-2xl flex flex-col text-left transition-all ${
+                          className={`p-4.5 border rounded-2xl flex flex-col items-center text-center transition-all duration-300 scale-100 hover:scale-[1.03] outline-none focus-visible:ring-2 focus-visible:ring-emerald-400 ${
                             inputs.foodHabit === opt.id
-                              ? 'border-emerald-500 bg-emerald-500/10 text-white'
-                              : 'border-white/5 bg-slate-950/40 text-slate-400 hover:border-white/10'
+                              ? 'border-emerald-500 bg-emerald-500/10 text-white shadow-[0_0_20px_rgba(16,185,129,0.25)] ring-1 ring-emerald-500'
+                              : 'border-white/5 bg-slate-950/40 text-slate-400 hover:border-white/10 hover:bg-slate-950/60'
                           }`}
                         >
-                          <span className="text-xs font-bold mb-0.5">{opt.label}</span>
-                          <span className="text-[9px] leading-tight text-slate-500">{opt.desc}</span>
+                          <span className="text-3xl mb-2.5 filter drop-shadow-[0_2px_8px_rgba(255,255,255,0.05)] animate-float">{opt.emoji}</span>
+                          <span className="text-xs font-black mb-1">{opt.label}</span>
+                          <span className="text-[9px] leading-snug text-slate-500 font-medium">{opt.desc}</span>
                         </button>
                       ))}
                     </div>
@@ -388,22 +389,23 @@ export default function Calculator({ currentInputs, onCalculate, hasCalculated }
                     </label>
                     <div className="grid grid-cols-3 gap-3">
                       {[
-                        { id: 'low', label: 'Eco-conscious', desc: 'Active recycling' },
-                        { id: 'medium', label: 'Average', desc: 'Moderate plastic buying' },
-                        { id: 'high', label: 'Heavy Waste', desc: 'Bottles, bags, single-use' }
+                        { id: 'low', label: 'Eco-conscious', desc: 'Active recycling', emoji: '♻️' },
+                        { id: 'medium', label: 'Average', desc: 'Moderate buying', emoji: '🛍️' },
+                        { id: 'high', label: 'Heavy Waste', desc: 'Single-use plastic', emoji: '🥤' }
                       ].map(opt => (
                         <button
                           key={opt.id}
                           type="button"
                           onClick={() => handleInputChange('plasticUsage', opt.id)}
-                          className={`p-3.5 border rounded-2xl flex flex-col text-left transition-all ${
+                          className={`p-4.5 border rounded-2xl flex flex-col items-center text-center transition-all duration-300 scale-100 hover:scale-[1.03] outline-none focus-visible:ring-2 focus-visible:ring-sky-400 ${
                             inputs.plasticUsage === opt.id
-                              ? 'border-violet-500 bg-violet-500/10 text-white'
-                              : 'border-white/5 bg-slate-950/40 text-slate-400 hover:border-white/10'
+                              ? 'border-sky-500 bg-sky-500/10 text-white shadow-[0_0_20px_rgba(56,189,248,0.25)] ring-1 ring-sky-500'
+                              : 'border-white/5 bg-slate-950/40 text-slate-400 hover:border-white/10 hover:bg-slate-950/60'
                           }`}
                         >
-                          <span className="text-xs font-bold mb-0.5">{opt.label}</span>
-                          <span className="text-[9px] leading-tight text-slate-500">{opt.desc}</span>
+                          <span className="text-3xl mb-2.5 filter drop-shadow-[0_2px_8px_rgba(255,255,255,0.05)] animate-float">{opt.emoji}</span>
+                          <span className="text-xs font-black mb-1">{opt.label}</span>
+                          <span className="text-[9px] leading-snug text-slate-500 font-medium">{opt.desc}</span>
                         </button>
                       ))}
                     </div>
@@ -416,22 +418,23 @@ export default function Calculator({ currentInputs, onCalculate, hasCalculated }
                     </label>
                     <div className="grid grid-cols-3 gap-3">
                       {[
-                        { id: 'rarely', label: 'Minimalist', desc: 'Essentials only' },
-                        { id: 'average', label: 'Average', desc: 'Occasional clothing/gear' },
-                        { id: 'frequently', label: 'Consumerist', desc: 'Weekly online orders' }
+                        { id: 'rarely', label: 'Minimalist', desc: 'Essentials only', emoji: '📦' },
+                        { id: 'average', label: 'Average', desc: 'Occasional clothes', emoji: '👕' },
+                        { id: 'frequently', label: 'Consumerist', desc: 'Weekly packages', emoji: '🛒' }
                       ].map(opt => (
                         <button
                           key={opt.id}
                           type="button"
                           onClick={() => handleInputChange('shoppingFrequency', opt.id)}
-                          className={`p-3.5 border rounded-2xl flex flex-col text-left transition-all ${
+                          className={`p-4.5 border rounded-2xl flex flex-col items-center text-center transition-all duration-300 scale-100 hover:scale-[1.03] outline-none focus-visible:ring-2 focus-visible:ring-violet-400 ${
                             inputs.shoppingFrequency === opt.id
-                              ? 'border-violet-500 bg-violet-500/10 text-white'
-                              : 'border-white/5 bg-slate-950/40 text-slate-400 hover:border-white/10'
+                              ? 'border-violet-500 bg-violet-500/10 text-white shadow-[0_0_20px_rgba(167,139,250,0.25)] ring-1 ring-violet-500'
+                              : 'border-white/5 bg-slate-950/40 text-slate-400 hover:border-white/10 hover:bg-slate-950/60'
                           }`}
                         >
-                          <span className="text-xs font-bold mb-0.5">{opt.label}</span>
-                          <span className="text-[9px] leading-tight text-slate-500">{opt.desc}</span>
+                          <span className="text-3xl mb-2.5 filter drop-shadow-[0_2px_8px_rgba(255,255,255,0.05)] animate-float">{opt.emoji}</span>
+                          <span className="text-xs font-black mb-1">{opt.label}</span>
+                          <span className="text-[9px] leading-snug text-slate-500 font-medium">{opt.desc}</span>
                         </button>
                       ))}
                     </div>
